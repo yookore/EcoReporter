@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "150227041442",
+    "firebase_url": "https://ecoreporter-3b29b.firebaseio.com",
+    "project_id": "ecoreporter-3b29b",
+    "storage_bucket": "ecoreporter-3b29b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150227041442:android:ac280caa8611d539",
+        "android_client_info": {
+          "package_name": "com.hyperswift.android.ecoreporter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150227041442-e0a8095sff4o9o6lr0simsvoq94e1roa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hyperswift.android.ecoreporter",
+            "certificate_hash": "3ED6CE6CD7D0DEDD557E9F575300D331CA5FA921"
+          }
+        },
+        {
+          "client_id": "150227041442-8dnfac3ihasmeojm51shc59asd6vs1t7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtur_HTEzWOXnvq40wTCDxc3s5AsDLAW4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150227041442-8dnfac3ihasmeojm51shc59asd6vs1t7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

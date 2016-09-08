@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tab>
+    <tab id="@+id/tab_location1" icon="@drawable/ic_location" title="Location"/>
+    <tab id="@+id/tab_location2" icon="@drawable/ic_location" title="Location"/>
+    <tab id="@+id/tab_location3" icon="@drawable/ic_location" title="Location"/>
+</tab>

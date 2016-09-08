@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">EcoReporter</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_post_incident">PostIncidentActivity</string>
+    <string name="placeholder_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut lacinia dolor. Cras pulvinar efficitur dapibus. Cras semper lorem eu dui sodales, sit amet viverra mauris congue. Nunc eget aliquam orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean iaculis, neque quis eleifend placerat, libero leo faucibus metus, nec rhoncus felis neque vitae tellus. Aenean sed ligula et justo convallis sodales. Praesent tincidunt felis sit amet est pharetra euismod. Mauris velit nunc, pretium nec iaculis sed, condimentum vitae est. In vestibulum nec purus quis egestas. Phasellus pretium lectus nec urna feugiat, viverra commodo lorem tempus. Vivamus faucibus mauris et odio tincidunt, a dictum augue tincidunt. Sed a commodo arcu, sit amet varius mauris. Maecenas quis hendrerit lacus, a pharetra mi. Proin ornare risus vel velit efficitur feugiat</string>
+    <string name="placeholder_location">Centurion, South Africa</string>
+    <string name="edit_placeholder_text">What happened?</string>
+    <string name="action_post">POST</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="card_placeholder">Placeholder text to wrap around the card...</string>
+    <string name="incident_text_placeholder">lorem ipsum txt is an additional placeholder pattern</string>
+    <string name="incident_posted_text">Posted: 26th September, 2016</string>
+    <string name="incident_feed">Incident feed</string>
+</resources>
