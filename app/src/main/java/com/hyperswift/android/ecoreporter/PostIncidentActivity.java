@@ -3,7 +3,10 @@ package com.hyperswift.android.ecoreporter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,9 +42,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hyperswift.android.ecoreporter.adapters.ImageAdapter;
 import com.hyperswift.android.ecoreporter.models.Incident;
+import com.hyperswift.android.ecoreporter.utils.ImageHelper;
 import com.mlsdev.rximagepicker.RxImagePicker;
 import com.mlsdev.rximagepicker.Sources;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +66,8 @@ public class PostIncidentActivity extends AppCompatActivity {
     ImageView btn_gallery;
     TextView locationText;
     ArrayList<String> downloadUris;
+    double location_latitude = 0.0;
+    double location_longitude = 0.0;
 
     Context context;
     int uploadCount = 0;
@@ -163,7 +170,6 @@ public class PostIncidentActivity extends AppCompatActivity {
     }
 
     public void closeActivity(View view) {
-        Toast.makeText(this, "Finishing this activity", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -175,7 +181,6 @@ public class PostIncidentActivity extends AppCompatActivity {
                 startActivityForResult(builder.build(this), 100);
             } catch (GooglePlayServicesNotAvailableException
                     | GooglePlayServicesRepairableException e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             Log.e("ALPHA", String.valueOf(btn_location.getImageAlpha()));
             btn_location.setImageAlpha(255);
@@ -190,6 +195,7 @@ public class PostIncidentActivity extends AppCompatActivity {
         RxImagePicker.with(this).requestImage(Sources.CAMERA).subscribe(new Action1<Uri>() {
             @Override
             public void call(Uri uri) {
+                Log.d(TAG, "Uri from camera: " + uri.toString());
                 imageUris.add(uri);
                 int currentSize = imageAdapter.getItemCount();
                 imageAdapter.notifyItemInserted(currentSize);
@@ -226,6 +232,8 @@ public class PostIncidentActivity extends AppCompatActivity {
                 builder.append(" (");
                 String latitude = Location.convert(latLong.latitude, Location.FORMAT_SECONDS);
                 String longitude = Location.convert(latLong.longitude, Location.FORMAT_SECONDS);
+                location_latitude = latLong.latitude;
+                location_longitude = latLong.longitude;
                 builder.append(latitude);
                 builder.append(", ");
                 builder.append(longitude);
@@ -241,11 +249,28 @@ public class PostIncidentActivity extends AppCompatActivity {
 
     public void saveImageData() {
         StorageReference storageRef = storage.getReferenceFromUrl(Constants.FIREBASE_STORAGE_URL);
-        if(imageUris.size() > 0){
+
+        if (imageUris.size() > 0) {
             for (Uri uri : imageUris) {
                 uploadCount = 0;
+
+                String pathFromURI = ImageHelper.getPath(context, uri);
+
+                if(pathFromURI != null){
+                    Log.e(TAG, "Path: " + pathFromURI);
+                }
+
+                Bitmap bitmap = ImageHelper.decodeSampledBitMapFromFile(pathFromURI);
+//
+//                    newBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+
+
                 StorageReference imagesRef = storageRef.child("images/" + uri.getLastPathSegment());
-                uploadTask = imagesRef.putFile(uri);
+//                uploadTask = imagesRef.putFile(uri);
+                uploadTask = imagesRef.putBytes(baos.toByteArray());
+
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -253,7 +278,6 @@ public class PostIncidentActivity extends AppCompatActivity {
                         Log.e(TAG, "Size of data: " + downloadUris.size());
                         uploadCount += 1;
                         if (uploadCount == imageUris.size()) {
-                            Toast.makeText(context, "All uploads are complete", Toast.LENGTH_SHORT).show();
                             //Continue with saving the data to realtime database...
                             saveToDB();
                         }
@@ -268,7 +292,7 @@ public class PostIncidentActivity extends AppCompatActivity {
                     }
                 });
             }
-        }else {
+        } else {
             saveToDB();
         }
 
@@ -280,6 +304,8 @@ public class PostIncidentActivity extends AppCompatActivity {
         incident.setLocation(locationText.getText().toString());
         incident.setCreationDate(new Date().getTime());
         incident.setImageUris(downloadUris);
+        incident.setLongitude(location_longitude);
+        incident.setLatitude(location_latitude);
 
         firebaseDatabase.child("incidents").child(String.valueOf(incident.getCreationDate())).setValue(incident,
                 new DatabaseReference.CompletionListener() {
@@ -290,7 +316,6 @@ public class PostIncidentActivity extends AppCompatActivity {
                 });
         hideProgressDialog();
         Log.d(TAG, incident.toString());
-        Toast.makeText(this, incident.toString(), Toast.LENGTH_LONG).show();
         finish();
     }
 

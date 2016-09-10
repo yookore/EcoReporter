@@ -14,6 +14,8 @@ public class Incident {
     private ArrayList<String> imageUris;
     private String location;
     private long creationDate;
+    private double latitude;
+    private double longitude;
 
     public Incident(){
         imageUris = new ArrayList<>();
@@ -50,6 +52,22 @@ public class Incident {
 
     public long getCreationDate() {
         return creationDate;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override

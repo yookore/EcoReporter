@@ -3,6 +3,7 @@ package com.hyperswift.android.ecoreporter.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.hyperswift.android.ecoreporter.R;
 import com.hyperswift.android.ecoreporter.models.Incident;
 import com.hyperswift.android.ecoreporter.viewholders.IncidentViewHolder;
@@ -22,6 +27,7 @@ import java.util.Date;
 
 
 public class IncidentAdapter extends RecyclerView.Adapter<IncidentViewHolder> {
+    private static final String TAG = IncidentAdapter.class.getSimpleName();
     private ArrayList<Incident> incidentArrayList;
     private Context context;
 
@@ -36,7 +42,9 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentViewHolder> {
     public IncidentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View incidentView = inflater.inflate(R.layout.incident_card, parent, false);
-        return new IncidentViewHolder(incidentView, this, incidentArrayList);
+        IncidentViewHolder holder = new IncidentViewHolder(incidentView, context, incidentArrayList);
+        holder.initializeView();
+        return holder;
     }
 
     @Override
@@ -46,10 +54,20 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentViewHolder> {
         TextView location = holder.incidentLocation;
         ImageView image1 = holder.firstImage;
         TextView posted = holder.incidentPosted;
+        holder.mapView.onResume();
+
+        if(holder.gMap != null ){
+            Log.e(TAG, incident.toString());
+            LatLng coords = new LatLng(incident.getLatitude(), incident.getLongitude());
+            holder.gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coords, 15f));
+            holder.gMap.addMarker(new MarkerOptions().title(incident.getLocation()).position(coords));
+            holder.gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        }else{
+            Log.e(TAG, "Holder was not initialized");
+        }
 
         body.setText(incident.getBody());
-        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-        ViewGroup.LayoutParams layoutParams = image1.getLayoutParams();
         if(incident.getImageUris().size() > 0){
             Glide.with(context).load(incident.getImageUris().get(0))
                     .fitCenter()
